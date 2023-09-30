@@ -194,43 +194,8 @@ public class CustomerServisesImplementation implements CustomerServices {
 
 	}
 
-	// overriding the abstract method updateCustomerDetailsByAdhaarNumber and
-	// defining its function
-	// updating customer's details using this method
-	@Override
-	public CustomerDto updateCustomerDetailsByAdhaarNumber(String customerAdharNumber, Customer customer) {
-		Customer existingCustomer = customerRepository.findByAadharNumber(customerAdharNumber)
-				.orElseThrow(() -> new ResourceNotFoundException("Customer", "Adhar number", customerAdharNumber));
-
-		existingCustomer.setContactNumber(customer.getContactNumber());
-		existingCustomer.setDateOfBirth(customer.getDateOfBirth());
-		existingCustomer.setGender(customer.getGender());
-		existingCustomer.setName(customer.getName());
-		existingCustomer.setLastName(customer.getLastName());
-		
-		existingCustomer.setEmail(customer.getEmail());
-		
-		existingCustomer.setAadharNumber(customer.getAadharNumber());
-		
-		existingCustomer.setPanNumber(customer.getPanNumber());
-		
-		existingCustomer.setBalance(customer.getBalance());
-		
-		if(customer.getAddress() != null)
-		{
-			existingCustomer.getAddress().setCity(customer.getAddress().getCity());
-			existingCustomer.getAddress().setState(customer.getAddress().getState());
-			existingCustomer.getAddress().setPincode(customer.getAddress().getPincode());
-			
-			addressRepository.save(existingCustomer.getAddress());
-		}
-
-		
-		customerRepository.save(existingCustomer);
-
-		return customerConverter.CustomerToCustomerDtoConverter(existingCustomer);
-	}
-
+	
+	
 
 	// overriding the abstract method deposit and defining its function
 	// depositing an amount into customer's account using this method
@@ -356,6 +321,45 @@ public class CustomerServisesImplementation implements CustomerServices {
 				.orElseThrow((() -> new ResourceNotFoundException("Account", "AccountNumber", accountNumber)));
 
 		return customerConverter.CustomerToCustomerDtoConverter(customer);
+	}
+
+	
+	// overriding the abstract method updateCustomerDetailsByAdhaarNumber and
+		// defining its function
+		// updating customer's details using this method
+	@Override
+	public CustomerDto updateCustomerDetailsByAccountNumber(String accountNumber, Customer customer) {
+		
+		Customer existingCustomer = customerRepository.findByAccountNumber(accountNumber)
+				.orElseThrow(() -> new ResourceNotFoundException("Customer", "Account number", accountNumber));
+
+		existingCustomer.setContactNumber(customer.getContactNumber());
+		existingCustomer.setDateOfBirth(customer.getDateOfBirth());
+		existingCustomer.setGender(customer.getGender());
+		existingCustomer.setName(customer.getName());
+		existingCustomer.setLastName(customer.getLastName());
+		
+		existingCustomer.setEmail(customer.getEmail());
+		
+		existingCustomer.setAadharNumber(customer.getAadharNumber());
+		
+		existingCustomer.setPanNumber(customer.getPanNumber());
+		
+		existingCustomer.setBalance(customer.getBalance());
+		
+		if(customer.getAddress() != null)
+		{
+			existingCustomer.getAddress().setCity(customer.getAddress().getCity());
+			existingCustomer.getAddress().setState(customer.getAddress().getState());
+			existingCustomer.getAddress().setPincode(customer.getAddress().getPincode());
+			
+			addressRepository.save(existingCustomer.getAddress());
+		}
+
+		
+		customerRepository.save(existingCustomer);
+
+		return customerConverter.CustomerToCustomerDtoConverter(existingCustomer);
 	}
 
 }

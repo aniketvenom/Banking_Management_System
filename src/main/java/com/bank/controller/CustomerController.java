@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,7 @@ import com.bank.services.CustomerServices;
 import com.bank.util.CustomerConverter;
 
 @RestController
+@CrossOrigin(origins="http://localhost:4200/")
 public class CustomerController {
 
 	@Autowired
@@ -59,44 +61,44 @@ public class CustomerController {
 
 	// To delete customer account by account number
 	@DeleteMapping("/deleteCustomerAccountByAccountNumber/{accountNumber}")
-	public ResponseEntity<String> deleteCustomerAccountByAccountNumber(
+	public void deleteCustomerAccountByAccountNumber(
 			@PathVariable("accountNumber") String customerAccountNumber) {
 		customerServices.deleteAnyCustomerUsingAccountNumber(customerAccountNumber);
-		return new ResponseEntity<String>("customer with Account Number " + customerAccountNumber + " has been deleted",
-				HttpStatus.OK);
+//		return new ResponseEntity<String>("customer with Account Number " + customerAccountNumber + " has been deleted",
+//				HttpStatus.OK);
 	}
 
 	// To update customer details using adhaar number
-	@PostMapping("/updateCustomerUsingAdharNumber/{adharNumber}")
-	public CustomerDto updateCustomerDetailsUsingAdharNumber(@PathVariable("adharNumber") String adharNumber,
+	@PostMapping("/updateCustomerUsingaccountNumber/{accountNumber}")
+	public CustomerDto updateCustomerDetailsUsingAdharNumber(@PathVariable("accountNumber") String accountNumber,
 			@Valid @RequestBody CustomerDto customer) {
-		return customerServices.updateCustomerDetailsByAdhaarNumber(adharNumber,
+		return customerServices.updateCustomerDetailsByAccountNumber(accountNumber,
 				customerConverter.customerDtoToCustomerCoverter(customer));
 	}
 
 	// To deposit any amount into customer's account account using account number
-	@PostMapping("/deposteIntoCustomerAccountWithAccountNumber/{accountNumber}/amount/{amount}")
-	public ResponseEntity<String> deposteIntoCustomerAccount(@PathVariable("accountNumber") String accountNumber,
+	@PostMapping("/depositIntoCustomerAccountWithAccountNumber/{accountNumber}/amount/{amount}")
+	public void deposteIntoCustomerAccount(@PathVariable("accountNumber") String accountNumber,
 			@PathVariable("amount") double amount)
 			throws IllegalArgumentException, ResourceNotFoundException, WithdrawAndDepositLimitException {
 		customerServices.deposit(accountNumber, amount);
 
-		return new ResponseEntity<String>(
-				amount + " has been deposited in customer's account with account number " + accountNumber,
-				HttpStatus.OK);
+//		return new ResponseEntity<String>(
+//				amount + " has been deposited in customer's account with account number " + accountNumber,
+//				HttpStatus.OK);
 	}
 
 	// To withdraw any amount from customer's account account using account number
 	@PostMapping("/withdrawFromCustomerAccountWithAccountNumber/{accountNumber}/amount/{amount}")
-	public ResponseEntity<String> withdrawFromCustomerAccount(@PathVariable("accountNumber") String accountNumber,
+	public void withdrawFromCustomerAccount(@PathVariable("accountNumber") String accountNumber,
 			@PathVariable("amount") double amount)
 			throws IllegalArgumentException, ResourceNotFoundException, WithdrawAndDepositLimitException {
 		customerServices.withdraw(accountNumber, amount);
 
-		return new ResponseEntity<String>(amount + " has been deducted from your account ", HttpStatus.OK);
+//		return new ResponseEntity<String>(amount + " has been deducted from your account ", HttpStatus.OK);
 	}
 
-	// To get customer's transactional details using his account number
+	// To get customer's transactiona details using his account number
 	@GetMapping("/getCustomerTransactionDetailsUsingAccountNumber/{accountNumber}")
 	public List<TransactionDetails> getCustomerTransactionDetailsUsingAccountNumber(
 			@PathVariable("accountNumber") String accountNumber) {

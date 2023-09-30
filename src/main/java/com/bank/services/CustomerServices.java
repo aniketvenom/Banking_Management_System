@@ -30,7 +30,7 @@ public interface CustomerServices {
 	void deleteAnyCustomerUsingAccountNumber(String accountNumber);
 
 	// creating abstract method to update customer's account using adhaar number
-	CustomerDto updateCustomerDetailsByAdhaarNumber(String customerAdharNumber, Customer customer);
+	CustomerDto updateCustomerDetailsByAccountNumber(String accountNumber, Customer customer);
 
 	// creating abstract method to deposit money into customer's account using his account number
 	void deposit(String accountNumber, double amount)
